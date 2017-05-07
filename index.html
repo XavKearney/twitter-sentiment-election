@@ -1,0 +1,113 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,900" rel="stylesheet">
+<link rel="shortcut icon" href="../xklogo/logo.png">
+<meta property="og:image" content="../xklogo/logo.png">
+<meta name="description" content="Experimental Twitter sentiment analysis for the UK General Election 2017, to gauge the mood of the different political parties.">
+<link rel="stylesheet" href="main.css" />
+<title>#GE2017 Twitter Sentiment Analysis</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-96943011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body>
+<script type="text/javascript">
+
+window.scale_property = "width";
+window.other_scale_property = "height";
+window.h1_size = "2.5vw";
+window.score_size = "1vw";
+
+function updateScores() {
+	var parties = ["con","lab","lib","snp"];
+	var pLen = parties.length;
+	$.getJSON('scores.json',
+		function(data){
+		for(var i = 0; i < pLen; i++){
+			$("#"+parties[i]).css(window.scale_property, 100 * Math.abs(data[parties[i]]) + "%");
+			$("#"+parties[i]).css(window.other_scale_property, "100%");
+			if(data[parties[i]] > 0){
+				$("#"+parties[i]+" #score").html("Positive");
+			}else{
+				$("#"+parties[i]+" #score").html("Negative");
+			}
+			if(Math.abs(data[parties[i]]) < 0.1){
+				$("#"+parties[i]+" h1").css("font-size","0");
+				$("#"+parties[i]+" #score").css("font-size","0");
+			}else{
+				$("#"+parties[i]+" h1").css("font-size",window.h1_size);
+				$("#"+parties[i]+" #score").css("font-size",window.score_size);
+			}
+		}
+	});
+}
+function checkMobile() {
+	window.isMobile = window.matchMedia("only screen and (max-device-width: 760px)");
+	if (window.isMobile.matches) {
+		window.scale_property = "height";
+		window.other_scale_property = "width";
+		window.h1_size = "5vw";
+		window.score_size = "3vw";
+	}else{
+		window.scale_property = "width";
+		window.other_scale_property = "height";
+		window.h1_size = "2.5vw";
+		window.score_size = "1vw";
+	}
+}
+
+$( document ).ready(function() {  
+	checkMobile();
+	setInterval(updateScores, 1000);
+	updateScores();
+});
+$( window ).resize(function() {
+	checkMobile();
+});
+</script>
+<div id="header">
+#GE2017 Live Twitter Sentiment Analysis
+<h2>Bar Size = Relative Strength of Mood</h2>
+</div>
+<div id="main">
+<div id="con"><h1>CON<br><span id="score"></span></h1></div>
+<div id="lab"><h1>LAB<br><span id="score"></span></h1></div>
+<div id="lib"><h1>LIB<br><span id="score"></span></h1></div>
+<div id="snp"><h1>SNP<br><span id="score"></span></h1></div>
+</div>
+<div id="footer">Created by <a href="../index.html">Xav Kearney</a>. Not affiliated with any political entity. <label class="btn" for="modal-1">Info</label></div>
+<input class="modal-state" id="modal-1" type="checkbox" />
+<div class="modal">
+  <label class="modal__bg" for="modal-1"></label>
+  <div class="modal__inner">
+    <label class="modal__close" for="modal-1"></label>
+	<h3>Info</h3>
+    This site was created as an experiment in Twitter sentiment analysis.<br>
+	The width of each party's section corresponds to the relative strength of the sentiment on Twitter. The Positive/Negative labels denote the polarity of the sentiment itself.<br>
+
+	The sentiment analysis is carried out using machine learning classifier tool <a href="http://www.nltk.org/">NLTK</a> and <a href="https://github.com/cjhutto/vaderSentiment">VADER</a>.<br>
+	The tweets are collated live using a Twitter API stream and a predefined set of search terms designed to encompass as many of the tweets relating to the election as possible.<br>
+	The results are only based on the tweets posted in the last few seconds, hence the sometimes dramatic variation that you may see. I calculate some moving averages to smooth this out a bit, but in general it would be too boring to only update the values at a slower rate, and the idea is to get an instantaneous idea of what's going on (for TV debates etc.)<br>
+	I don't correct for any biases (e.g. the overall voting preference average for Twitter, or the difference in how vocal supporters of different parties are) because there are already so many biases built into the fact that it's based on tweets. I think it provides interesting insight regardless.<br>
+	If the bar-size of a party goes to zero, it means at that instant there is no overall positive or negative sentiment.<br>
+	Parties are sorted alphabetically. I have no affiliation to any party or campaign.
+	<br><br>
+	Any questions, please email <script language='JavaScript'>
+	var username = 'mail';
+	var hostname = 'xavkearney.com';
+	var linktext = username + '@' + hostname ;
+	document.write("<a href='" + 'mail' + 'to:' + username + '@' + hostname + "'>" + linktext + "</a>");
+	</script>.
+    
+  </div>
+</div>
+</body>
+</html>
