@@ -1,5 +1,4 @@
-# twitter-sentiment-election
-## Live Twitter Sentiment Analysis for #GE2017
+# Live Twitter Sentiment Analysis for #GE2017
 
 This repo contains all the files I created as an experiment in Twitter sentiment analysis.
 
@@ -16,3 +15,6 @@ The results are only based on the tweets posted in the last few seconds, hence t
 I don't correct for any biases (e.g. the overall voting preference average for Twitter, or the difference in how vocal supporters of different parties are) because there are already so many biases built into the fact that it's based on tweets. I think it provides interesting insight regardless.
 
 Parties are sorted alphabetically. I have no affiliation to any party or campaign.
+
+# License
+Distributed under the MIT License as in the LICENSE file.
