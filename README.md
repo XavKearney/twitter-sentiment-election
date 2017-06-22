@@ -2,7 +2,7 @@
 
 This repo contains all the files I created as an experiment in Twitter sentiment analysis.
 
-The live version can be viewed [here](http://xavkearney.com/sentiment).
+The live version used to be [here](http://xavkearney.com/sentiment), but is no longer active.
 
 On the website, the width of each party's section corresponds to the relative strength of the sentiment on Twitter. The Positive/Negative labels denote the polarity of the sentiment itself.
 
